@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+    <title>Home</title>
+    <head>
+        <style>
+        
+        body {
+            text-align: center;
+        }
+    
+        a {
+            margin-bottom: 10px;
+        }
+    
+        form {
+            margin-top: 30px;
+        }
+    
+        #search-form label {
+            font-weight: bold;
+        }
+    
+        
+        h1 {
+            color: #333;
+        }
+    
+        a {
+            text-decoration: none;
+        }
+    
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            outline: none;
+            border-color: #4CAF50;
+            box-shadow: 0 0 5px rgba(76, 175, 80, 0.5);
+        }
+    
+        #search-form input[type="submit"] {
+            background-color: #007bff;
+        }
+    
+        #search-form input[type="submit"]:hover {
+            background-color: #0069d9;
+        }
+    
+        #search-form p.error-message {
+            color: red;
+            font-size: 14px;
+            margin-top: 10px;
+        }
+    </style>
+    </head>
+    <body>
+        <header>
+            <h1 style="color: #333; text-align: center;">Bienvenido, {{data.username}}</h1>
+        </header>
+
+        <nav style="text-align: center; margin-bottom: 20px;">
+            <a href="add_tweet" style="text-decoration: none; margin-right: 20px;">Publica un tweet</a>
+            <a href="profile/{{data.username}}" style="text-decoration: none; margin-right: 20px;">Ve a tu perfil</a>
+            <a href="logout" style="text-decoration: none; margin-right: 20px;">Logout</a>
+            <a href="edit_profile/{{data.username}}"  style="text-decoration: none; margin-right: 20px;">Editar perfil</a>
+            <a href="delete_profile/{{data.username}}"  style="text-decoration: none;">Eliminar perfil</a>
+        </nav>
+
+        <section style="text-align: center;">
+            <form id="search-form" action="/home" method="post" style="display: inline-block;">
+                <label for="username" style="font-weight: bold;">Busca un usuario:</label>
+                <br>
+                <input type="text" id="username" name="username" placeholder="Ingrese el nombre de usuario" required style="padding: 10px; margin-top: 10px;">
+                <br>
+                <br>
+                <input type="submit" value="Buscar" style="padding: 10px; background-color: #4CAF50; color: #fff; border: none; border-radius: 3px; cursor: pointer;">
+            </form>
+        </section>
+    </body>
+</html>

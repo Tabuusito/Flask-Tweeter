@@ -1,0 +1,181 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Detalle del tweet</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 20px;
+            background-color: #f5f5f5;
+        }
+
+        b {
+            font-weight: bold;
+        }
+
+        a {
+            color: #007bff;
+            text-decoration: none;
+        }
+
+        a:hover {
+            text-decoration: underline;
+        }
+
+        .tweet-container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 5px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .tweet-container h2 {
+            margin-top: 0;
+        }
+
+        .tweet-container p {
+            margin-bottom: 10px;
+        }
+
+        .tweet-container .author {
+            color: #777;
+        }
+
+        .tweet-container .likes {
+            color: #4CAF50;
+        }
+
+        .tweet-container .actions {
+            margin-top: 10px;
+        }
+
+        .tweet-container .actions a {
+            margin-right: 10px;
+        }
+
+        .comment-form {
+            display: none;
+            margin-top: 20px;
+        }
+
+        .comment-form label {
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .comment-form input[type="text"],
+        .comment-form input[type="file"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+
+        .comment-form input[type="submit"] {
+            width: auto;
+            padding: 8px 20px;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+
+        .comment-form input[type="submit"]:hover {
+            background-color: #45a049;
+        }
+
+        .comment-list {
+            list-style-type: none;
+            padding: 0;
+            margin-top: 20px;
+        }
+
+        .comment-list li {
+            background-color: #f9f9f9;
+            padding: 10px;
+            border-radius: 3px;
+            margin-bottom: 10px;
+        }
+
+        .comment-list .comment-author {
+            font-weight: bold;
+            color: #555;
+        }
+
+        .comment-list .comment-text {
+            margin-top: 5px;
+        }
+
+        .comment-list .comment-likes {
+            color: #4CAF50;
+            font-size: 12px;
+        }
+
+        .comment-list .comment-actions a {
+            margin-right: 5px;
+        }
+    </style>
+    <script>
+        function toggleForm() {
+            var form = document.getElementById("comment-form");
+            form.style.display = (form.style.display === "none") ? "block" : "none";
+        }
+    </script>
+</head>
+<body>
+    <div class="tweet-container">
+        <h2>Detalle del tweet</h2>
+        <a href="../home">Volver a home</a>
+        <p><b>Autor: </b><a href="../profile/{{data.tweet.owner}}">{{data.tweet.owner}}</a></p>
+        <p>{{ data.tweet.text }}</p>
+        <p class="likes">Likes: {{data.tweet.get_number_likes()}}</p>
+        
+        <div class="actions">
+            {% if data.tweet.has_liked(data.current_user.username) %}
+                <a href="../like_action/{{data.tweet.get_id()}}">Dislike</a>
+            {% else %}
+                <a href="../like_action/{{data.tweet.get_id()}}">Like</a>
+            {% endif %}
+            <a href="../tweet/{{data.tweet.get_id()}}">Ver tweet</a>
+            {% if data.tweet.its_owner(data.current_user.username) %}
+                <a href="../delete_tweet/{{data.tweet.get_id()}}">Eliminar</a>
+            {% endif %}
+        </div>
+
+        <button onclick="toggleForm()">Comentar</button>
+        <form id="comment-form" class="comment-form" action="/tweet/{{data.tweet.get_id()}}" method="post">
+            <label for="comment">Comentario:</label>
+            <input type="text" id="comment" name="comment" required>
+            <br>
+            <input type="file" id="tweetImage" accept="image/*">
+            <input type="submit" value="Enviar">
+        </form>
+    </div>
+
+    <ul class="comment-list">
+        {% for tweet in data.tweet.get_answers(data.srp) %}
+        <li>
+            <p class="comment-author"><b>Autor: </b><a href="../profile/{{tweet.owner}}">{{tweet.owner}}</a></p>
+            <p class="comment-text">{{ tweet.text }}</p>
+            <p class="comment-likes">Likes: {{tweet.get_number_likes()}}</p>
+            <div class="comment-actions">
+                {% if tweet.has_liked(data.current_user.username) %}
+                    <a href="../like_action/{{tweet.get_id()}}">Dislike</a>
+                {% else %}
+                    <a href="../like_action/{{tweet.get_id()}}">Like</a>
+                {% endif %}
+                <a href="../tweet/{{tweet.get_id()}}">Ver tweet</a>
+                {% if tweet.its_owner(data.current_user.username) %}
+                    <a href="../delete_tweet/{{data.tweet.get_id()}}">Eliminar</a>
+                {% endif %}
+            </div>
+        </li>
+        {% else %}
+        <li><b>No hay respuestas publicadas.</b></li>
+        {% endfor %}
+    </ul>
+</body>
+</html>
